@@ -1,0 +1,362 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "PP OWNS THIS",
+    LoadingTitle = "Booting Interface...",
+    LoadingSubtitle = "by King JuiceWRLD",
+
+    ConfigurationSaving = {
+        Enabled = false
+    },
+
+    KeySystem = true,
+    KeySettings = {
+        Title = "PP ACCESS",
+        Subtitle = "Enter Key",
+        Note = "Authorized Users Only 💀",
+        FileName = "PPKey",
+        SaveKey = false,
+        GrabKeyFromSite = false,
+        Key = {"pinagpalit.gg"}
+    }
+})
+
+-- ✨ ANIMATED LOADING
+task.spawn(function()
+    local texts = {
+        "Booting Interface.",
+        "Booting Interface..",
+        "Booting Interface...",
+        "Injecting Systems.",
+        "Injecting Systems..",
+        "Injecting Systems..."
+    }
+
+    for i = 1, #texts do
+        Window:SetLoadingTitle(texts[i])
+        task.wait(0.4)
+    end
+
+    Window:SetLoadingTitle("PP OWNS THIS 💀")
+end)
+
+-- 🔊 UI SOUND
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://9118828563"
+sound.Volume = 2
+sound.Parent = game:GetService("SoundService")
+sound:Play()
+
+-- 🔔 LOAD NOTIF
+task.delay(1, function()
+    Rayfield:Notify({
+        Title = "SYSTEM READY",
+        Content = "PP OWNS THIS 🔥",
+        Duration = 5,
+        Image = 4483362458
+    })
+end)
+
+-- 🌫️ UI POP-IN
+task.spawn(function()
+    local gui = game:GetService("CoreGui"):FindFirstChild("Rayfield")
+    if gui then
+        gui.Enabled = false
+        task.wait(0.2)
+        gui.Enabled = true
+    end
+end)
+
+-- 🔊 CLICK SOUND
+game:GetService("UserInputService").InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        local s = Instance.new("Sound")
+        s.SoundId = "rbxassetid://12222225"
+        s.Volume = 1
+        s.Parent = game:GetService("SoundService")
+        s:Play()
+        game:GetService("Debris"):AddItem(s, 1)
+    end
+end)
+
+-- TABS
+local WorldTab = Window:CreateTab("🌍 Overworld", 4483362458)
+local DungeonTab = Window:CreateTab("🏰 Dungeons", 4483362458)
+local MiscTab = Window:CreateTab("🧰 Miscellaneous", 4483362458)
+local PlayerTab = Window:CreateTab("🧍 Player", 4483362458)
+
+-- SERVICES
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- 🔒 ANTI AFK
+local AntiAFK = false
+local VirtualUser = game:GetService("VirtualUser")
+
+LocalPlayer.Idled:Connect(function()
+    if AntiAFK then
+        VirtualUser:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+        task.wait(1)
+        VirtualUser:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    end
+end)
+
+MiscTab:CreateToggle({
+Name = "🛡️ Anti AFK",
+CurrentValue = false,
+Callback = function(v)
+AntiAFK = v
+if v then
+Rayfield:Notify({Title="Anti AFK",Content="Enabled 🛡️",Duration=3})
+end
+end,
+})
+
+-- REMOTES
+local WorldRemote = ReplicatedStorage
+:WaitForChild("\228\186\139\228\187\182")
+:WaitForChild("\229\133\172\231\148\168")
+:WaitForChild("\229\133\179\229\141\161")
+:WaitForChild("\232\191\155\229\133\165\228\184\150\231\149\140\229\133\179\229\141\161")
+
+local DungeonRemote = ReplicatedStorage
+:WaitForChild("\228\186\139\228\187\182")
+:WaitForChild("\229\133\172\231\148\168")
+:WaitForChild("\229\137\175\230\156\172")
+:WaitForChild("\232\191\155\229\133\165\229\137\175\230\156\172")
+
+local OptionsRemote = ReplicatedStorage
+:WaitForChild("\228\186\139\228\187\182")
+:WaitForChild("\229\133\172\231\148\168")
+:WaitForChild("\229\134\156\231\148\176")
+:WaitForChild("\233\135\135\233\155\134")
+
+-- WORLD SYSTEM
+local SelectedWorld = 1
+local AutoWorld = false
+
+WorldTab:CreateSlider({
+Name = "🌐 World Difficulty",
+Range = {1,130},
+Increment = 1,
+CurrentValue = 1,
+Callback = function(v)
+SelectedWorld = v
+end,
+})
+
+WorldTab:CreateToggle({
+Name = "⏰ Auto Join",
+CurrentValue = false,
+Callback = function(v)
+AutoWorld = v
+if v then
+Rayfield:Notify({Title="Auto Join",Content="Enabled ⏰",Duration=3})
+end
+end,
+})
+
+-- MISC
+local AutoOptions = false
+local OptionsPos = Vector2.new(504.8966, 77.9507)
+
+MiscTab:CreateToggle({
+Name = "🌿 Collect Marijuana",
+CurrentValue = false,
+Callback = function(v)
+AutoOptions = v
+if v then
+Rayfield:Notify({Title="Collect Marijuana",Content="Farming Started 🌿",Duration=3})
+end
+end,
+})
+
+-- DUNGEON
+local DungeonState = { id = 1 }
+local SelectedStage = 1
+local AutoDungeon = false
+
+DungeonTab:CreateDropdown({
+Name = "🍄 Dungeon Type",
+Options = {"Ore","Gem","Rune","Relic","Gold","Hover"},
+CurrentOption = "Ore",
+Callback = function(v)
+local value = typeof(v) == "table" and (v.Value or v[1] or v.CurrentOption) or v
+value = tostring(value):lower()
+
+if value == "ore" then DungeonState.id = 1 end  
+if value == "gem" then DungeonState.id = 2 end  
+if value == "rune" then DungeonState.id = 3 end  
+if value == "relic" then DungeonState.id = 4 end  
+if value == "gold" then DungeonState.id = 6 end  
+if value == "hover" then DungeonState.id = 7 end  
+
+Rayfield:Notify({Title="Dungeon Set",Content=value.." selected",Duration=3})
+end,
+})
+
+DungeonTab:CreateSlider({
+Name = "📈 Difficulty",
+Range = {1,2300},
+Increment = 1,
+CurrentValue = 1,
+Callback = function(v)
+SelectedStage = v
+end,
+})
+
+DungeonTab:CreateToggle({
+Name = "⏰ Auto Join",
+CurrentValue = false,
+Callback = function(v)
+AutoDungeon = v
+if v then
+Rayfield:Notify({Title="Auto Join",Content="Activated ⏰",Duration=3})
+end
+end,
+})
+
+-- PLAYER SPEED
+local SpeedEnabled = false
+local SpeedValue = 16
+local DefaultSpeed = nil
+
+local function GetHumanoid()
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    return char:WaitForChild("Humanoid")
+end
+
+task.spawn(function()
+    DefaultSpeed = GetHumanoid().WalkSpeed
+end)
+
+PlayerTab:CreateSlider({
+Name = "⚡ Movement Speed",
+Range = {1,200},
+Increment = 1,
+CurrentValue = 16,
+Callback = function(v)
+SpeedValue = v
+if SpeedEnabled then
+GetHumanoid().WalkSpeed = v
+end
+end,
+})
+
+PlayerTab:CreateToggle({
+Name = "🏃 Speed Boost",
+CurrentValue = false,
+Callback = function(v)
+SpeedEnabled = v
+local hum = GetHumanoid()
+
+if v then
+if not DefaultSpeed then
+DefaultSpeed = hum.WalkSpeed
+end
+hum.WalkSpeed = SpeedValue
+else
+if DefaultSpeed then
+hum.WalkSpeed = DefaultSpeed
+end
+end
+end,
+})
+
+-- 🔁 BETTER SERVER HOP (PLAYER TAB)
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local PlaceId = game.PlaceId
+local JobId = game.JobId
+
+local function GetServers()
+    local servers = {}
+    local cursor = ""
+    
+    for i = 1,3 do -- get more pages
+        local url = "https://games.roblox.com/v1/games/"..PlaceId.."/servers/Public?sortOrder=Asc&limit=100"
+        if cursor ~= "" then
+            url = url .. "&cursor=" .. cursor
+        end
+        
+        local res = HttpService:JSONDecode(game:HttpGet(url))
+        
+        for _,v in pairs(res.data) do
+            if v.playing < v.maxPlayers and v.id ~= JobId and v.playing > 0 then
+                table.insert(servers, v)
+            end
+        end
+        
+        cursor = res.nextPageCursor
+        if not cursor then break end
+    end
+    
+    return servers
+end
+
+PlayerTab:CreateButton({
+Name = "🔁 Rejoin",
+Callback = function()
+TeleportService:Teleport(PlaceId, LocalPlayer)
+end,
+})
+
+PlayerTab:CreateButton({
+Name = "🌐 Server Hop",
+Callback = function()
+local servers = GetServers()
+
+if #servers > 0 then
+local server = servers[math.random(1,#servers)]
+TeleportService:TeleportToPlaceInstance(PlaceId, server.id, LocalPlayer)
+end
+end,
+})
+
+PlayerTab:CreateButton({
+Name = "📉 Low Player Server",
+Callback = function()
+local servers = GetServers()
+
+table.sort(servers, function(a,b)
+return a.playing < b.playing
+end)
+
+if #servers > 0 then
+TeleportService:TeleportToPlaceInstance(PlaceId, servers[1].id, LocalPlayer)
+end
+end,
+})
+
+-- FUNCTIONS
+local function JoinWorld()
+pcall(function()
+WorldRemote:FireServer(SelectedWorld)
+end)
+end
+
+local function JoinDungeon()
+pcall(function()
+DungeonRemote:FireServer(DungeonState.id, SelectedStage)
+end)
+end
+
+-- LOOP
+task.spawn(function()
+    while true do
+        if AutoWorld then JoinWorld() end
+        if AutoDungeon then JoinDungeon() end  
+
+        if AutoOptions then
+            for option = 1, 5 do
+                pcall(function()
+                    OptionsRemote:FireServer(option, OptionsPos)
+                end)
+                task.wait(0.1)
+            end
+        end
+
+        task.wait(0.5)
+    end
+end)
